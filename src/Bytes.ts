@@ -1,15 +1,23 @@
 import { Buffer } from "buffer";
 
 export class Bytes<T extends number> {
-  static fromUint8Array<T extends number>(bytes: Uint8Array): Bytes<T> {
+  private static fromUint8Array<T extends number>(bytes: Uint8Array): Bytes<T> {
     return new Bytes<T>(Buffer.from(bytes));
   }
 
-  static fromString<T extends number>(bytes: string): Bytes<T> {
+  private static fromString<T extends number>(bytes: string): Bytes<T> {
     if (bytes.startsWith("0x")) {
       return new Bytes<T>(Buffer.from(bytes.substring(2), "hex"));
     } else {
       return new Bytes<T>(Buffer.from(bytes, "hex"));
+    }
+  }
+
+  static from<T extends number>(value: string | Uint8Array | Buffer): Bytes<T> {
+    if (typeof value == "string") {
+      return Bytes.fromString(value);
+    } else {
+      return Bytes.fromUint8Array(value);
     }
   }
 
