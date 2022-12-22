@@ -1,27 +1,19 @@
 import { Buffer } from "buffer";
 
 export class Bytes<T extends number> {
-  readonly bytes: Buffer;
+  static fromUint8Array<T extends number>(bytes: Uint8Array): Bytes<T> {
+    return new Bytes<T>(Buffer.from(bytes));
+  }
 
-  constructor(bytes: Uint8Array | Buffer | string | Bytes<T>) {
-    if (bytes instanceof Uint8Array) {
-      this.bytes = Buffer.from(bytes);
-    } else if (bytes instanceof Buffer) {
-      this.bytes = Buffer.alloc(bytes.length);
-      bytes.copy(this.bytes);
-    } else if (typeof bytes == "string") {
-      if (bytes.startsWith("0x")) {
-        this.bytes = Buffer.from(bytes.substring(2), "hex");
-      } else {
-        this.bytes = Buffer.from(bytes, "hex");
-      }
-    } else if (bytes instanceof Bytes<T>) {
-      this.bytes = Buffer.alloc(bytes.bytes.length);
-      bytes.bytes.copy(this.bytes);
+  static fromString<T extends number>(bytes: string): Bytes<T> {
+    if (bytes.startsWith("0x")) {
+      return new Bytes<T>(Buffer.from(bytes.substring(2), "hex"));
     } else {
-      throw new Error("Invalid bytes");
+      return new Bytes<T>(Buffer.from(bytes, "hex"));
     }
   }
+
+  constructor(public readonly bytes: Buffer) {}
 
   get zero(): boolean {
     return this.bytes.every((b) => b == 0);
