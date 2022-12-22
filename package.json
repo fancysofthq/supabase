@@ -1,6 +1,6 @@
 {
   "name": "@fancysofthq/supabase",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Common code for frontend and backend",
   "author": {
     "name": "Fancy Software",
