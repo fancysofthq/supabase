@@ -13,7 +13,7 @@ export class Bytes<T extends number> {
     }
   }
 
-  static from<T extends number>(value: string | Uint8Array | Buffer): Bytes<T> {
+  static from<T extends number>(value: string | Uint8Array): Bytes<T> {
     if (typeof value == "string") {
       return Bytes.fromString(value);
     } else {
